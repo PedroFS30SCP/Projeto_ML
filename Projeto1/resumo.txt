@@ -1,0 +1,68 @@
+## Projeto 1 — TMAA  
+### Análise por Componentes Principais (PCA) e Decomposição em Valores Singulares (SVD)
+
+---
+
+## Alínea (a) — Importar e visualizar a imagem
+
+Nesta primeira parte, a imagem `eye_image.jpg` foi carregada em tons de cinzento e redimensionada para 16×16 pixels.  
+O resultado é uma matriz X com dimensão (16, 16), onde cada elemento representa a intensidade (0–255) de um pixel.
+
+**Interpretação:**  
+Cada linha de X pode ser vista como um vetor em R¹⁶, representando o perfil de brilho de uma linha da imagem.
+
+---
+
+## Alínea (b) — Centrar os dados
+
+Calculou-se o vetor média μ, ou seja, média dos 16 vetores (linhas) em R16 e subtraiu-se essa média a todas as linhas de X, obtendo a matriz centrada Y.
+
+**Resultados principais:**
+- Dimensão de μ: (16,)
+- Dimensão de Y: (16, 16)
+
+A matriz Y contém valores positivos e negativos, indicando o quanto cada pixel difere da média da sua coluna.
+
+**Interpretação:**  
+- Valores positivos → pixel mais claro que a média.  
+- Valores negativos → pixel mais escuro que a média.  
+- Os dados ficam agora centrados na origem, prontos para análise PCA/SVD.
+
+---
+
+## Alínea (c) — Decomposição em Valores Singulares (SVD) e matrizes de descodificação
+
+Aplicou-se a decomposição em valores singulares:
+
+Y = U Σ Vᵀ
+
+- U (16×16) → vetores singulares à esquerda (padrões nas linhas da imagem).  
+- Σ (16) → valores singulares (grau de importância de cada componente).  
+- Vᵀ (16×16) → vetores singulares à direita (direções principais de variação).
+
+A partir de V, foram criadas as matrizes de descodificação Dᵢ com as primeiras i colunas, para i = 2, 5, 10:
+
+| Matriz | Dimensão | Descrição |
+|:--|:--|:--|
+| D₂ | (16×2) | 2 componentes principais |
+| D₅ | (16×5) | 5 componentes principais |
+| D₁₀ | (16×10) | 10 componentes principais |
+
+**Interpretação:**  
+Cada coluna de Dᵢ é uma direção principal (ou eixo) que explica parte da variância da imagem.  
+Ao usarmos apenas as primeiras colunas, estamos a reduzir a dimensionalidade, isto é, a comprimir a informação.
+
+---
+
+## Alínea (d) — Codificação (compressão da imagem)
+
+Nesta fase projetámos os dados centrados Y nas direções principais correspondentes a i = 2 componentes:
+
+Zᵢ = Dᵢᵀ × Yᵀ
+
+**Resultado:**  
+- Dimensão de Z₂: (2, 16) → os dados, originalmente de 16 dimensões, foram comprimidos para 2.
+
+**Interpretação:**  
+- Zᵢ contém a representação comprimida da imagem, em que cada coluna indica a contribuição das i componentes principais para reconstruir os pixels.  
+- Esta é a fase de codificação da PCA, reduzir o número de dimensões mantendo o máximo de informação possível.
